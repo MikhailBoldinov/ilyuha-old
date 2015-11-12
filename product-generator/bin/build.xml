@@ -1,0 +1,34 @@
+<project name="ProductGenerator" basedir="../../" default="production">
+
+    <property name="lib.dir" value="lib"/>
+
+    <path id="classpath">
+        <fileset dir="../lib" includes="**/*.jar"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="classes"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <mkdir dir="classes"/>
+        <javac srcdir="src" destdir="classes" classpathref="classpath"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir=""/>
+        <jar destfile="/ProductGenerator.jar" basedir="classes">
+            <manifest>
+                <attribute name="Main-Class" value="main.ProductGenerator"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="production" depends="jar">
+        <copy file="/ProductGenerator.jar" todir="production" overwrite="true"/>
+        <copy file="../lib/poi-3.12-20150511.jar" todir="production" overwrite="true"/>
+        <copy file="xls" todir="production" overwrite="true"/>
+        <copy file=".bat" todir="production" overwrite="true"/>
+    </target>
+
+</project>
