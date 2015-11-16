@@ -1,10 +1,7 @@
-package main.utils;
-
-import main.beans.Group;
-import main.beans.Product;
+package core.utils;
 
 /**
- * @author Mikhail Boldinov, 20.09.15
+ * @author Mikhail Boldinov
  */
 public final class Utils {
 
@@ -36,16 +33,5 @@ public final class Utils {
         progress.append(pct);
         progress.append("%\r");
         System.out.print(progress);
-    }
-
-    public static int getCodesCount(Product product) {
-        int count = 1;
-        for (Group group : product.getGroups()) {
-            int codesCount = group.getCodes().size();
-            if (codesCount != 0) {
-                count *= codesCount;
-            }
-        }
-        return count;
     }
 }

@@ -1,22 +1,22 @@
 package main;
 
+import core.utils.ProgressIndicator;
+import core.xls.Config;
+import core.xls.ConfigItem;
+import main.beans.Group;
 import main.beans.Product;
 import main.beans.ProductResult;
 import main.service.ProductProcessor;
-import main.utils.ProgressIndicator;
-import main.utils.Utils;
-import main.xls.Config;
-import main.xls.ConfigItem;
 import main.xls.ProductReader;
 import main.xls.ProductWriter;
 
 import java.io.IOException;
 
-import static main.xls.Column.A;
-import static main.xls.Column.B;
-import static main.xls.Column.C;
-import static main.xls.Column.D;
-import static main.xls.Column.E;
+import static core.xls.Column.A;
+import static core.xls.Column.B;
+import static core.xls.Column.C;
+import static core.xls.Column.D;
+import static core.xls.Column.E;
 import static main.xls.Field.CODE;
 import static main.xls.Field.CODE_DESCRIPTION;
 import static main.xls.Field.DESCRIPTION;
@@ -30,7 +30,7 @@ import static main.xls.Field.SERIAL_NUMBER;
 import static main.xls.Field.SHORT_DESCRIPTION;
 
 /**
- * @author Mikhail Boldinov, 17.09.15
+ * @author Mikhail Boldinov
  */
 public class ProductGenerator {
 
@@ -67,11 +67,10 @@ public class ProductGenerator {
             System.out.println(String.format("Чтение входящего файла '%s' . . .", inFileName));
 
             ProductReader productReader = new ProductReader(inFileName, CONFIG);
-            productReader.read();
-            Product product = productReader.getProduct();
+            Product product = productReader.read();
             System.out.println("OK");
 
-            int codesCount = Utils.getCodesCount(product);
+            int codesCount = getCodesCount(product);
             if (codesCount > CODES_COUNT_TO_WARN) {
                 System.out.println(String.format("Количество возможных кодов - %d. Обработка может занять длительное время.", codesCount));
             }
@@ -92,5 +91,16 @@ public class ProductGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static int getCodesCount(Product product) {
+        int count = 1;
+        for (Group group : product.getGroups()) {
+            int codesCount = group.getCodes().size();
+            if (codesCount != 0) {
+                count *= codesCount;
+            }
+        }
+        return count;
     }
 }

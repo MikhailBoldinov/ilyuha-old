@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 /**
  * https://regex101.com/
  *
- * @author Mikhail Boldinov, 09.11.15
+ * @author Mikhail Boldinov
  */
 public class Main {
     private static final String TEST_STR =

@@ -1,7 +1,7 @@
 package main.beans;
 
 /**
- * @author Mikhail Boldinov, 17.09.15
+ * @author Mikhail Boldinov
  */
 public class Code {
     private String key;

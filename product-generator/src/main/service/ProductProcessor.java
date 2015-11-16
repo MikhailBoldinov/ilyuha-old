@@ -1,10 +1,10 @@
 package main.service;
 
+import core.utils.Utils;
 import main.beans.Code;
 import main.beans.Group;
 import main.beans.Product;
 import main.beans.ProductResult;
-import main.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import static main.ProductGenerator.NEW_LINE;
 import static main.ProductGenerator.SPACE;
 
 /**
- * @author Mikhail Boldinov, 20.09.15
+ * @author Mikhail Boldinov
  */
 public class ProductProcessor {
 

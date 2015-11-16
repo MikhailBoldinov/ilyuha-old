@@ -1,6 +1,6 @@
 package main.beans;
 
-import main.utils.Utils;
+import core.utils.Utils;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import static main.ProductGenerator.DOT;
 import static main.ProductGenerator.SLASH;
 
 /**
- * @author Mikhail Boldinov, 20.09.15
+ * @author Mikhail Boldinov
  */
 public class ProductResult {
 

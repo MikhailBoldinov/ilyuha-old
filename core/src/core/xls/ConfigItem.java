@@ -1,7 +1,7 @@
-package main.xls;
+package core.xls;
 
 /**
- * @author Mikhail Boldinov, 20.09.15
+ * @author Mikhail Boldinov
  */
 public class ConfigItem {
     private int rowOffset;

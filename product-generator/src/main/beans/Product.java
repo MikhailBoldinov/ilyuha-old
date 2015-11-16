@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Mikhail Boldinov, 17.09.15
+ * @author Mikhail Boldinov
  */
 public class Product {
     private String description;

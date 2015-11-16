@@ -1,44 +1,41 @@
 package main.xls;
 
+import core.io.IWriter;
+import core.io.impl.AbstractWriter;
 import main.beans.Code;
 import main.beans.ProductResult;
-import main.utils.Utils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static main.xls.Column.A;
-import static main.xls.Column.B;
-import static main.xls.Column.C;
-import static main.xls.Column.D;
-import static main.xls.Column.E;
-import static main.xls.Column.F;
-import static main.xls.Column.G;
-import static main.xls.Column.H;
-import static main.xls.Column.I;
-import static main.xls.Column.J;
-import static main.xls.Column.K;
-import static main.xls.Column.L;
-import static main.xls.Column.M;
-import static main.xls.Column.N;
-import static main.xls.Column.O;
-import static main.xls.Column.P;
-import static main.xls.Column.Q;
+import static core.xls.Column.A;
+import static core.xls.Column.B;
+import static core.xls.Column.C;
+import static core.xls.Column.D;
+import static core.xls.Column.E;
+import static core.xls.Column.F;
+import static core.xls.Column.G;
+import static core.xls.Column.H;
+import static core.xls.Column.I;
+import static core.xls.Column.J;
+import static core.xls.Column.K;
+import static core.xls.Column.L;
+import static core.xls.Column.M;
+import static core.xls.Column.N;
+import static core.xls.Column.O;
+import static core.xls.Column.P;
+import static core.xls.Column.Q;
 
 /**
- * @author Mikhail Boldinov, 20.09.15
+ * @author Mikhail Boldinov
  */
-public class ProductWriter {
+public class ProductWriter extends AbstractWriter implements IWriter<ProductResult> {
 
     private static final int EMPTY_COLUMN_WIDTH = 600;
     private static final int SHORT_DESCRIPTION_COLUMN_WIDTH = 8000;
@@ -49,14 +46,11 @@ public class ProductWriter {
     private static final String FONT_NAME = "Calibri";
     private static final short FONT_SIZE = 11;
 
-    private String fileName;
-    private Workbook wb;
-
     public ProductWriter(String fileName) {
-        this.fileName = fileName;
-        wb = new HSSFWorkbook();
+        super(fileName);
     }
 
+    @Override
     public void write(ProductResult productResult) throws IOException {
         Sheet sheet = createNewSheet(wb);
         CellStyle evenRowStyle = getEvenRowStyle(true);
@@ -94,7 +88,7 @@ public class ProductWriter {
             addCell(sheet, currentRow, P, productResult.getDescription(productCode.getKey(), productCode.getValue()), style);
             addCell(sheet, currentRow, Q, productResult.getImage(), style);
             currentRow++;
-            if (currentRow > 65535) {
+            if (currentRow > MAX_ROWS_NUMBER) {
                 sheet = createNewSheet(wb);
                 currentRow = HEADER_ROW_NUMBER + 1;
             }
@@ -106,14 +100,7 @@ public class ProductWriter {
         fileOut.close();
     }
 
-    private Sheet createNewSheet(Workbook wb) {
-        Sheet sheet = wb.createSheet();
-        sheet.createFreezePane(0, 1);
-        writeHeader(sheet);
-        return sheet;
-    }
-
-    private void writeHeader(Sheet sheet) {
+    protected void writeHeader(Sheet sheet) {
         Row header = sheet.createRow(HEADER_ROW_NUMBER);
         header.setHeight(HEADER_HEIGHT);
 
@@ -135,31 +122,6 @@ public class ProductWriter {
         addCell(sheet, HEADER_ROW_NUMBER, O, "Краткое описание", style);
         addCell(sheet, HEADER_ROW_NUMBER, P, "Полное описание", style);
         addCell(sheet, HEADER_ROW_NUMBER, Q, "Картинка", style);
-    }
-
-    private void addCell(Sheet sheet, int rowNumber, Column column, CellStyle style) {
-        addCell(sheet, rowNumber, column, null, style);
-    }
-
-    private void addCell(Sheet sheet, int rowNumber, Column column, String value, CellStyle style) {
-        Row row = sheet.getRow(rowNumber);
-        Cell cell = row.createCell(column.getNum());
-        if (value != null) {
-            cell.setCellValue(value);
-        }
-        cell.setCellStyle(style);
-    }
-
-    private void setColumnWidth(Sheet sheet, Column column, boolean autoSize) {
-        setColumnWidth(sheet, column, autoSize, 0);
-    }
-
-    private void setColumnWidth(Sheet sheet, Column column, boolean autoSize, int width) {
-        if (autoSize) {
-            sheet.autoSizeColumn(column.getNum());
-        } else {
-            sheet.setColumnWidth(column.getNum(), width);
-        }
     }
 
     private void setColumnsWidth() {
@@ -230,26 +192,5 @@ public class ProductWriter {
             cellStyle.setBorderRight(CellStyle.BORDER_THIN);
         }
         return cellStyle;
-    }
-
-    public static void main(String[] args) throws Exception {
-        int rowNum = 0;
-        Workbook wb = new HSSFWorkbook();
-        Sheet sheet = wb.createSheet();
-        for (IndexedColors indexedColors : IndexedColors.values()) {
-            Cell cell = sheet.createRow(rowNum).createCell(0);
-            cell.setCellValue(indexedColors.name());
-
-            CellStyle cellStyle = wb.createCellStyle();
-            cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-            cellStyle.setFillForegroundColor(indexedColors.getIndex());
-            cell.setCellStyle(cellStyle);
-
-            rowNum++;
-        }
-
-        FileOutputStream fileOut = new FileOutputStream("colors.xls");
-        wb.write(fileOut);
-        fileOut.close();
     }
 }

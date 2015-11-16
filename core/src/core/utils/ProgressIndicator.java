@@ -1,10 +1,7 @@
-package main.utils;
-
-import java.util.HashSet;
-import java.util.Set;
+package core.utils;
 
 /**
- * @author Mikhail Boldinov, 20.09.15
+ * @author Mikhail Boldinov
  */
 public class ProgressIndicator implements Runnable {
 

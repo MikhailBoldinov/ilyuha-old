@@ -1,9 +1,11 @@
 package main.xls;
 
+import core.xls.IField;
+
 /**
- * @author Mikhail Boldinov, 20.09.15
+ * @author Mikhail Boldinov
  */
-public enum Field {
+public enum Field implements IField{
     DESCRIPTION,
     PRODUCER,
     SERIAL_NUMBER,
